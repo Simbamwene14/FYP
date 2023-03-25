@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "757087137413",
+    "project_id": "signuser",
+    "storage_bucket": "signuser.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:757087137413:android:e613603f3edd31d31943ec",
+        "android_client_info": {
+          "package_name": "com.tommy.signuser_module"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "757087137413-qrqal0g44s2l2f5cpk1v8v68vu23q2uh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-UWewt6CutGdoi1xh1SgaV4GqS6aAw2c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "757087137413-qrqal0g44s2l2f5cpk1v8v68vu23q2uh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

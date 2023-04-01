@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:signuser_module/databases/services/crud_services.dart';
 import 'package:signuser_module/routes/route.dart';
 import 'package:signuser_module/services/auth/auth_services.dart';
 import 'dart:developer' as devtools show log;
@@ -14,6 +15,9 @@ class ContentView extends StatefulWidget {
 enum MenuAction { signOut, profile }
 
 class _ContentViewState extends State<ContentView> {
+  late final DatabaseServices _dbServices;
+  String get userEmail => AuthService.firebase().currentUser!.email!;
+
   late PageController _controller;
   int pageNo = 0;
 
@@ -63,6 +67,8 @@ class _ContentViewState extends State<ContentView> {
 
   @override
   void initState() {
+    _dbServices = DatabaseServices();
+    _dbServices.openDB();
     _controller = PageController(
       initialPage: 0,
       viewportFraction: 0.85,
@@ -73,6 +79,7 @@ class _ContentViewState extends State<ContentView> {
 
   @override
   void dispose() {
+    _dbServices.closeDB();
     _controller.dispose();
     super.dispose();
   }

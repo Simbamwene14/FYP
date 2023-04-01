@@ -9,10 +9,18 @@ class UserAlreadyExist implements Exception {}
 
 class CouldNotDeleteUser implements Exception {}
 
+class DatabaseIsOpen implements Exception {}
+
 class CouldNotFindUser implements Exception {}
 
 class DatabaseServices {
   Database? _db;
+
+  //The DatabaseServices is made singleton
+  static final DatabaseServices _shared = DatabaseServices._sharedInstance();
+  DatabaseServices._sharedInstance();
+  factory DatabaseServices() => _shared;
+
 
   Future<void> openDB() async {
     final dbPath = await getDatabasesPath();
@@ -23,6 +31,14 @@ class DatabaseServices {
 
     await db.execute(createTableMzazi);
     await db.execute(createTableMtoto);
+  }
+
+  Future<void> ensureDbIsOpen() async {
+    try {
+      await openDB();
+    } on DatabaseIsOpen {
+      // empty
+    }
   }
 
   Future<void> closeDB() async {
@@ -45,6 +61,7 @@ class DatabaseServices {
       {required String email,
       required String jina,
       required String uhusiano}) async {
+    await ensureDbIsOpen();
     final db = _getDatabaseOrThrow();
     final results = await db.query(
       mzaziTable,
@@ -68,7 +85,8 @@ class DatabaseServices {
   }
 
   Future<DatabaseMzazi> getMzazi(
-      {required String email, required int id}) async {
+      {required String email}) async {
+    await ensureDbIsOpen();
     final db = _getDatabaseOrThrow();
 
     final result = await db.query(
@@ -94,9 +112,10 @@ class DatabaseServices {
     required String jinsia,
     required int mzaziId,
   }) async {
+    await ensureDbIsOpen();
     final db = _getDatabaseOrThrow();
 
-    final dbMtoto = await getMzazi(email: owner.email, id: owner.id);
+    final dbMtoto = await getMzazi(email: owner.email);
 
     if (dbMtoto != owner) {
       throw CouldNotFindUser();
@@ -120,8 +139,8 @@ class DatabaseServices {
   }
 
   Future<void> deleteMtoto({required int id}) async{
+    await ensureDbIsOpen();
     final db = _getDatabaseOrThrow();
-
     final deletedCount = await db.delete(
       mzaziTable,
       where: 'id = ?',
@@ -136,6 +155,7 @@ class DatabaseServices {
   }
 
   Future<void> deleteMzazi({required String email}) async {
+    await ensureDbIsOpen();
     final db = _getDatabaseOrThrow();
     final deletedCount = await db.delete(
       mzaziTable,
